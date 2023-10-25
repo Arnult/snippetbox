@@ -4,26 +4,43 @@ import (
 	"context"
 	"github.com/fvbock/endless"
 	"github.com/gin-gonic/gin"
+	"github.com/spf13/viper"
 	"go.uber.org/fx"
 	"go.uber.org/zap"
-	"snippetbox.lhsort.top/internal/snippet"
+	"snippetbox.lhsort.top/log"
 )
 
-func NewHttpServer(lc fx.Lifecycle, log *zap.Logger) *gin.Engine {
+var Module = fx.Module("routes", fx.Provide(
+	log.NewLog,
+	NewHttpServer,
+))
+
+type HttpServerParam struct {
+	fx.In
+
+	L      *zap.Logger
+	Routes []Handler `group:"routes"`
+}
+
+func NewHttpServer(lc fx.Lifecycle, v HttpServerParam) *gin.Engine {
 	gin.SetMode(gin.DebugMode)
 	r := gin.Default()
+	l := v.L
 	lc.Append(
 		fx.Hook{
 			OnStart: func(ctx context.Context) error {
 				r.LoadHTMLGlob("ui/html/**/*.tmpl")
 				r.Static("/static", "ui/static")
-				log.Info("load html templates")
+				for _, route := range v.Routes {
+					route.RouteRegister(r)
+				}
+				l.Info("load html templates")
 				go func() {
-					err := endless.ListenAndServe(":4000", r)
+					err := endless.ListenAndServe(":"+viper.GetString("server.port"), r)
 					if err != nil {
-						log.Error("failed to start http server", zap.Error(err))
+						l.Error("failed to start http server", zap.Error(err))
 					}
-					log.Info("starting http server", zap.String("address", ":4000"))
+					l.Info("starting http server", zap.String("address", ":4000"))
 				}()
 				return nil
 			},
@@ -32,11 +49,14 @@ func NewHttpServer(lc fx.Lifecycle, log *zap.Logger) *gin.Engine {
 	return r
 }
 
-func AddRoutes(r *gin.Engine) {
-	r.GET("/", snippet.Home)
-	st := r.Group("/snippet")
-	st.GET("/view", snippet.View)
-	st.POST("/create", func(c *gin.Context) {
-		c.String(200, "Create a new s")
-	})
+type Handler interface {
+	RouteRegister(r *gin.Engine)
+}
+
+func AsRoute(f any) any {
+	return fx.Annotate(
+		f,
+		fx.As(new(Handler)),
+		fx.ResultTags(`group:"routes"`),
+	)
 }

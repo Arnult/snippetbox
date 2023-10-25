@@ -5,16 +5,18 @@ import (
 	"go.uber.org/fx"
 	"go.uber.org/fx/fxevent"
 	"go.uber.org/zap"
+	"snippetbox.lhsort.top/configs"
+	"snippetbox.lhsort.top/internal/handlers"
 	"snippetbox.lhsort.top/internal/routes"
 )
 
 func main() {
+	configs.NewConfig()
 	fx.New(
-		fx.Provide(zap.NewExample, routes.NewHttpServer),
+		routes.Module,
+		handlers.Module,
 		fx.Invoke(
-			func(r *gin.Engine) {
-				routes.AddRoutes(r)
-			},
+			func(r *gin.Engine) {},
 		),
 		fx.WithLogger(func(log *zap.Logger) fxevent.Logger {
 			return &fxevent.ZapLogger{Logger: log}
