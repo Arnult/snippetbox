@@ -7,6 +7,7 @@ import (
 	"go.uber.org/zap"
 	"snippetbox.lhsort.top/configs"
 	"snippetbox.lhsort.top/internal/handlers"
+	"snippetbox.lhsort.top/internal/repositories"
 	"snippetbox.lhsort.top/internal/routes"
 )
 
@@ -14,6 +15,7 @@ func main() {
 	configs.NewConfig()
 	fx.New(
 		routes.Module,
+		repositories.Module,
 		handlers.Module,
 		fx.Invoke(
 			func(r *gin.Engine) {},

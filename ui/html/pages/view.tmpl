@@ -1,0 +1,15 @@
+{{define "view"}}
+{{template "header" .}}
+    <div class='snippet'>
+        <div class='metadata'>
+            <strong>{{.snippet.Title}}</strong>
+            <span>#{{.snippet.ID}}</span>
+        </div>
+        <pre><code>{{.snippet.Content}}</code></pre>
+        <div class='metadata'>
+            <time>Created: {{.snippet.CreatedAt}}</time>
+            <time>Expires: {{.snippet.Expires}}</time>
+        </div>
+    </div>
+{{template "footer"}}
+{{end}}
