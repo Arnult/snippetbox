@@ -1,0 +1,31 @@
+{{define "signup"}}
+    {{template "header" .}}
+    <form action="/user/signup" method="post">
+        <div>
+            <label>Name:</label>
+            {{with .Data.FieldErrors.Name}}
+                <label class="error">{{.}}</label>
+            {{end}}
+            <input type="text" name="name" value="{{.Data.Name}}">
+        </div>
+        <div>
+            <label>Email:</label>
+            {{with .Data.FieldErrors.Email}}
+                <label class="error">{{.}}</label>
+            {{end}}
+            <input type="email" name="email" value="{{.Data.Email}}">
+        </div>
+        <div>
+            <label>Password:</label>
+            {{with .Data.FieldErrors.Password}}
+                <label class="error">{{.}}</label>
+            {{end}}
+            <input type="password" name="password">
+        </div>
+        <div>
+            <input type="hidden" name="csrf_token" value="{{ .CsrfToken }}">
+            <input type="submit" value="SignUp">
+        </div>
+    </form>
+    {{template "footer"}}
+{{end}}

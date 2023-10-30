@@ -1,0 +1,47 @@
+{{define "home"}}
+    {{template "header" .}}
+    <h2>Latest data</h2>
+    {{if .Data.Snippets}}
+        <table>
+            <tr>
+                <th>Title</th>
+                <th>Created</th>
+                <th>ID</th>
+            </tr>
+            {{range .Data.Snippets}}
+                <tr>
+                    <td><a href='/snippet/view/{{.ID}}'>{{.Title}}</a></td>
+                    <td>{{.CreatedAt}}</td>
+                    <td>#{{.ID}}</td>
+                </tr>
+            {{end}}
+        </table>
+        <div class="center">
+            <div class="pagination">
+                {{if gt .Data.PageInfo.CurrentPage 6}}
+                    <a href="/?page=1">1</a>
+                    <a>...</a>
+                {{end}}
+                {{range .Data.PageInfo.CPMI}}
+                    {{if gt . 0}}
+                        <a href="/?page={{.}}">{{.}}</a>
+                    {{end}}
+                {{end}}
+                <a class="active">{{.Data.PageInfo.CurrentPage}}</a>
+                {{range .Data.PageInfo.CPAJ}}
+                    {{if le . $.Data.PageInfo.TotalPage}}
+                        <a href="/?page={{.}}">{{.}}</a>
+                    {{end}}
+                {{end}}
+                {{if lt .Data.PageInfo.CurrentPage .Data.PageInfo.TPM5}}
+                    <a>...</a>
+                    <a href="/?page={{.Data.PageInfo.TotalPage}}">{{.Data.PageInfo.TotalPage}}</a>
+                {{end}}
+            </div>
+        </div>
+
+    {{else}}
+        <p>There's nothing to see here... yet!</p>
+    {{end}}
+    {{template "footer"}}
+{{end}}

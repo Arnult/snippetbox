@@ -1,0 +1,30 @@
+{{define "login"}}
+    {{template "header" .}}
+    <form action="/user/login" method="post">
+        <div>
+            {{range .Data.NonFieldErrors}}
+                <div class="error">{{.}}</div>
+            {{end}}
+        </div>
+        <div>
+            <label>Email:</label>
+            {{with .Data.FieldErrors.Email}}
+                <label class="error">{{.}}</label>
+            {{end}}
+            <input type="email" name="email" value="{{.Data.Email}}">
+        </div>
+        <div>
+            <label>Password:</label>
+            {{with .Data.FieldErrors.Password}}
+                <label class="error">{{.}}</label>
+            {{end}}
+            <input type="password" name="password">
+        </div>
+        <div>
+            <input type="hidden" name="csrf_token" value="{{ .CsrfToken }}">
+            <input type="submit" value="Login">
+        </div>
+
+    </form>
+    {{template "footer"}}
+{{end}}

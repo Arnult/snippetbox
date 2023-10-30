@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-type Snippet struct {
+type Snippets struct {
 	ID        uint      `gorm:"primary_key;auto_increment"`
 	CreatedAt time.Time `gorm:"index:idx_snippets_created"`
 	UpdatedAt time.Time
@@ -15,6 +15,6 @@ type Snippet struct {
 	Expires   time.Time
 }
 
-func (Snippet) TableName() string {
+func (Snippets) TableName() string {
 	return "snippets"
 }

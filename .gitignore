@@ -17,3 +17,6 @@
 
 #log
 *.log
+
+.vscode
+tls

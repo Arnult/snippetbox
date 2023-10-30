@@ -13,8 +13,10 @@ func NewDatabase() (*gorm.DB, error) {
 	db, err := gorm.Open(mysql.New(mysql.Config{
 		DSN:               dsn, // DSN data source name
 		DefaultStringSize: 256, // string 类型字段的默认长度
-	}), &gorm.Config{})
-	err = db.AutoMigrate(&models.Snippet{})
+	}), &gorm.Config{
+		TranslateError: true,
+	})
+	err = db.AutoMigrate(&models.Snippets{}, &models.Users{})
 	if err != nil {
 		return nil, err
 	}
