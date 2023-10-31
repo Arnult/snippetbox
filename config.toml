@@ -1,7 +1,7 @@
 [server]
 port = 4000
 [database]
-host = "192.168.31.179"
+host = "127.0.0.1"
 port = 3306
 user = "root"
 password = "123"
@@ -9,7 +9,7 @@ name = "snippetbox"
 [i18n]
 lang = "en"
 [redis]
-host = "192.168.31.179"
+host = "127.0.0.1"
 port = 6379
 password = ""
 authKey = "vP93NGmluBFBHwUk+UX2vh53S/IrvQ0bAe09ZS5JCeY="
