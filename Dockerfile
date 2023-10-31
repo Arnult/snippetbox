@@ -10,8 +10,9 @@ RUN CGO_ENABLED=0 GOOS=linux go build -o snippetbox ./cmd/snippetbox
 
 FROM gcr.io/distroless/base-debian11 AS build-release-stage
 
-WORKDIR /
+WORKDIR /app
 
-COPY --from=build-stage /app/snippetbox /snippetbox
+COPY --from=build-stage /app/snippetbox /app/snippetbox
+COPY --from=build-stage /app/ui/ /app/ui/
 
-ENTRYPOINT ["/snippetbox"]
+ENTRYPOINT ["/app/snippetbox"]
