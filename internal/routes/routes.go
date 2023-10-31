@@ -47,7 +47,7 @@ type HttpServerParam struct {
 // It also registers the routes provided in the HttpServerParam.
 func NewHttpServer(lc fx.Lifecycle, v HttpServerParam) *gin.Engine {
 	// Set Gin mode
-	gin.SetMode(gin.DebugMode)
+	gin.SetMode(gin.ReleaseMode)
 
 	// CreatePost a new gin engine with default middleware
 	r := gin.Default()
