@@ -2,6 +2,7 @@ package database
 
 import (
 	"fmt"
+
 	"github.com/spf13/viper"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -16,9 +17,12 @@ func NewDatabase() (*gorm.DB, error) {
 	}), &gorm.Config{
 		TranslateError: true,
 	})
+	if err != nil {
+		return nil, err
+	}
 	err = db.AutoMigrate(&models.Snippets{}, &models.Users{})
 	if err != nil {
 		return nil, err
 	}
-	return db, err
+	return db, nil
 }
