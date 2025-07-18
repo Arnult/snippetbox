@@ -21,4 +21,6 @@
 .vscode
 tls
 
+local_config/
+
 dist/

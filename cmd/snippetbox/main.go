@@ -1,6 +1,8 @@
 package main
 
 import (
+	"flag"
+
 	"github.com/gin-gonic/gin"
 	"go.uber.org/fx"
 	"go.uber.org/fx/fxevent"
@@ -12,7 +14,9 @@ import (
 )
 
 func main() {
-	configs.NewConfig()
+	configPath := flag.String("config", "./config/config.toml", "config file path")
+	flag.Parse()
+	configs.NewConfig(*configPath)
 	fx.New(
 		routes.Module,
 		repositories.Module,
