@@ -2,6 +2,8 @@ package handlers
 
 import (
 	"errors"
+	"net/http"
+
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
@@ -9,7 +11,6 @@ import (
 	"go.uber.org/zap"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
-	"net/http"
 	"snippetbox.lhsort.top/internal/repositories"
 	"snippetbox.lhsort.top/internal/routes"
 )
@@ -46,6 +47,7 @@ func (u *User) SignUpPost(c *gin.Context) {
 			p.FieldErrors = errm
 			td := newTemplateData(c, p, "SignUp", nil)
 			c.HTML(http.StatusUnprocessableEntity, "signup", td)
+			return
 		}
 	}
 	err = u.repo.Insert(p.Name, p.Email, p.Password)
@@ -57,6 +59,7 @@ func (u *User) SignUpPost(c *gin.Context) {
 		p.FieldErrors = fe
 		td := newTemplateData(c, p, "SignUp", nil)
 		c.HTML(http.StatusUnprocessableEntity, "signup", td)
+		return
 	} else {
 		c.Redirect(http.StatusSeeOther, "/user/login")
 	}
